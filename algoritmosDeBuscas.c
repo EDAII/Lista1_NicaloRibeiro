@@ -6,7 +6,7 @@
 #include<stdlib.h>
 #include<time.h>
  
-
+void menu();
 void imprimeVetor();
 void realizarBuscaSequencial();
 void realizarBuscaBinaria();
@@ -24,7 +24,6 @@ double *resultadoBuscaSequencial = NULL, *resultadoBuscaBinaria = NULL;
 int numeroDeBuscasSequenciais = 0, numeroDeBuscasBinarias = 0;
 
 int main(){
-  
     printf("Digite o tamanho do vetor :\n");
     scanf("%d", &tamanho);
 
@@ -34,24 +33,35 @@ int main(){
     resultadoBuscaBinaria = (double *)malloc(numeroDeBuscasBinarias * sizeof(double));
     
     if(vetor == NULL || vetorOrdenado == NULL){
-        printf("Erro ao criar vetor\nFim do programa\n");
+        printf("Erro ao criar vetor.\nFim do programa.\n");
         exit(1);
     }else{
-        printf("Vetor Criado\n");
+        printf("Vetores Criados.\n");
     }
 
     if(resultadoBuscaSequencial == NULL || resultadoBuscaBinaria == NULL){
-        printf("Erro ao criar vetor de resultados\nFim do programa\n");
+        printf("Erro ao criar vetor de resultados.\nFim do programa.\n");
         exit(1);
     }else{
-        printf("Vetor de Resultados criado\n\n");
+        printf("Vetores de Resultados criados.\n");
     }
 
     preencheVetor();
     ordenarVetor(); 
+    menu();  
 
-    int opcao;   
+    free(vetor);
+    free(vetorOrdenado);
+    free(resultadoBuscaSequencial);
+    free(resultadoBuscaBinaria);
+    printf("Espaço dos vetores alocados liberados.\n");
+    printf("Fim do programa.\n");
     
+    return 0;
+}
+
+void menu(){
+    int opcao;       
     do{
         printf("\n|\t\tMENU\n");
         printf("|\t\t----\n");
@@ -77,21 +87,16 @@ int main(){
                 mostrarDesempenho();
                 break;
             case 0:
-                printf("Fim do programa.\n");         
+                printf("Encerrando...\n");         
                 break;
     
             default:
-            printf("Digite uma opção válida\n");
-            
-    }
-}while(opcao != 0);
+            printf("Digite uma opção válida\n");            
+        }
 
-    free(vetor);
-    free(vetorOrdenado);
-    free(resultadoBuscaSequencial);
-    free(resultadoBuscaBinaria);
-    
-    return 0;
+    }while(opcao != 0);
+
+    return;
 }
 
 void imprimeVetor(){
@@ -132,10 +137,10 @@ void realizarBuscaSequencial(){
         if(achou == -1){
             printf("\nO valor %d não foi encontrado. A busca durou %lf segundos\n",busca,duracaoSeq);
         }else{
-            printf("\nO valor %d foi encontrado na posição %d em uma busca que durou %lf segundos\n",busca,achou,duracaoSeq);
+            printf("\nO valor %d foi encontrado na posição %d. A busca que durou %lf segundos\n",busca,achou,duracaoSeq);
         }
     
-        printf("\nDeseja continuar buscando ? <0 Para NÃO> <Qualquer outro Número Para SIM> \n");
+        printf("\nContinuar buscas? <0 Para NÃO> <Qualquer outro Número Para SIM> \n");
         scanf("%d",&continuarBusca);
 
     }while(continuarBusca);
@@ -166,7 +171,7 @@ void realizarBuscaBinaria(){
             printf("\nO valor %d foi encontrado na posição %d. A busca durou %lf segundos\n",busca,achou,duracaoBin);
         }
     
-        printf("\nDeseja continuar buscando ? <0 Para NÃO> <Qualquer outro Número Para SIM> \n");
+        printf("\nContinuar buscas? <0 Para NÃO> <Qualquer outro Número Para SIM> \n");
         scanf("%d",&continuarBuscaBinaria);
 
     }while(continuarBuscaBinaria);
@@ -174,12 +179,14 @@ void realizarBuscaBinaria(){
 }
 
 void mostrarDesempenho(){
-    if(numeroDeBuscasBinarias == 0 && numeroDeBuscasSequenciais == 0){
-        printf("\nNenhuma busca foi realizada ainda!\n\n");    
-        return;        
-    }
+    
     int voltar = 1;
     do{
+        if(numeroDeBuscasBinarias == 0 && numeroDeBuscasSequenciais == 0){
+        printf("\nNenhuma busca foi realizada ainda!\n\n");   
+        break;        
+        }
+
         printf("\nAté o momento foram realizadas: \n->%d buscas sequenciais \n->%d buscas binárias\n->Tamanho do vetor: %d\n", numeroDeBuscasSequenciais, numeroDeBuscasBinarias,tamanho);
         if(numeroDeBuscasSequenciais){
             printf("\nBuscas sequenciais : \n");
@@ -220,6 +227,7 @@ void preencheVetor(){
 }
 
 void ordenarVetor(){
+    printf("Ordenação em andamento...\n");
     copiaVetor(vetor,vetorOrdenado,tamanho);
     int i,j,min,swap;
     for(i = 0; i < (tamanho-1); i++){
@@ -231,9 +239,9 @@ void ordenarVetor(){
         }
             swap = vetorOrdenado[min];
             vetorOrdenado[min] = vetorOrdenado[i];
-            vetorOrdenado[i] = swap;
-            
+            vetorOrdenado[i] = swap;            
         }
+    printf("Vetor Ordenado.\n\n");
 }
 
 void copiaVetor(int *vetorOriginal, int *vetorCopia, int tamanho){
